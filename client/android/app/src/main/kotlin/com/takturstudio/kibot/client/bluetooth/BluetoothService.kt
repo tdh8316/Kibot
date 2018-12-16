@@ -14,7 +14,6 @@ class BluetoothService {
     private var outputStream: OutputStream? = null
     private var inStream: InputStream? = null
     private val position: Int = 0
-
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Throws(IOException::class)
     fun init() {
@@ -22,7 +21,6 @@ class BluetoothService {
         if (blueAdapter != null) {
             if (blueAdapter.isEnabled) {
                 val bondedDevices = blueAdapter.bondedDevices
-
                 if (bondedDevices.size > 0) {
                     val devices = bondedDevices.toTypedArray() as Array<*>
                     val device = devices[position] as BluetoothDevice
@@ -32,7 +30,6 @@ class BluetoothService {
                     outputStream = socket.outputStream
                     inStream = socket.inputStream
                 }
-
                 Log.e("error", "No appropriate paired devices.")
             } else {
                 Log.e("error", "Bluetooth is disabled.")
@@ -49,16 +46,12 @@ class BluetoothService {
         val size = 1024
         val buffer = ByteArray(size)
         var bytes = 0
-
         while (true) {
             try {
                 bytes = inStream!!.read(buffer, bytes, size - bytes)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-
         }
     }
 }
-
-
