@@ -7,10 +7,10 @@ const platform = const MethodChannel("Kibot/client");
 void main() {
   try {
     platform.invokeMethod("bluetoothInit");
-    runApp(new MaterialApp(home: MainActivity()));
   } catch (e) {
     showToast("FATAL: $e");
   }
+  runApp(new MaterialApp(home: MainActivity()));
 }
 
 void showToast(msg) {
@@ -24,6 +24,15 @@ void showToast(msg) {
 }
 
 class MainActivity extends StatelessWidget {
+  Future<void> sendSignal(String s) {
+    try {
+      platform.invokeMethod("bluetoothWrite", s);
+    } catch (e) {
+      showToast("Failed to write via bluetooth: $e");
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -37,16 +46,13 @@ class MainActivity extends StatelessWidget {
             padding: EdgeInsets.all(5),
             children: <Widget>[
               MaterialButton(
-                  onPressed: () =>
-                      platform.invokeMethod("bluetoothWrite", "교무실"),
+                  onPressed: () => sendSignal("교무실"),
                   child: Text("교무실", style: TextStyle(fontSize: 25))),
               MaterialButton(
-                  onPressed: () =>
-                      platform.invokeMethod("bluetoothWrite", "화장실"),
+                  onPressed: () => sendSignal("화장실"),
                   child: Text("화장실", style: TextStyle(fontSize: 25))),
               MaterialButton(
-                  onPressed: () =>
-                      platform.invokeMethod("bluetoothWrite", "엄재훈"),
+                  onPressed: () => sendSignal("엄재훈"),
                   child: Text("엄재훈", style: TextStyle(fontSize: 25))),
             ],
           )),
