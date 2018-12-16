@@ -30,15 +30,15 @@ class BluetoothService {
                     outputStream = socket.outputStream
                     inStream = socket.inputStream
                 }
-                Log.e("error", "No appropriate paired devices.")
+                throw Exception("No appropriate paired devices.")
             } else {
-                Log.e("error", "Bluetooth is disabled.")
+                throw Exception("Bluetooth is disabled.")
             }
         }
     }
 
-    @Throws(IOException::class)
     fun write(s: String) {
+        //if (outputStream == null) throw Exception("Bluetooth is not able to initialize.")
         outputStream!!.write(s.toByteArray())
     }
 
