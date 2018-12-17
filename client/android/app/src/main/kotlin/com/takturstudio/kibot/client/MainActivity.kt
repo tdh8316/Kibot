@@ -1,7 +1,6 @@
 package com.takturstudio.kibot.client
 
 import android.os.Bundle
-import android.util.Log
 import com.takturstudio.kibot.client.bluetooth.BluetoothService
 import io.flutter.app.FlutterActivity
 import io.flutter.plugin.common.MethodChannel
@@ -15,20 +14,18 @@ class MainActivity : FlutterActivity() {
         GeneratedPluginRegistrant.registerWith(this)
         MethodChannel(flutterView, channel).setMethodCallHandler { call, result ->
             when (call.method.toString()) {
-                "bluetoothInit" -> bluetoothInit()
-                "bluetoothWrite" -> bluetoothWrite(call.arguments.toString())
+                "bluetoothInit" -> bluetoothService.init()
+                "bluetoothWrite" -> {
+                    try {
+                        result.success(bluetoothService.write(call.arguments.toString()))
+                    } catch (e: Exception) {
+                        result.error("No appropriate paired devices.", e.toString(), null)
+                    } catch (e: UninitializedPropertyAccessException) {
+                        result.error("Bluetooth is disabled.", e.toString(), null)
+                    }
+                }
                 else -> result.notImplemented()
             }
         }
-    }
-
-    private fun bluetoothInit() {
-        bluetoothService.init()
-        Log.d(channel, "bluetooth initialized")
-    }
-
-    private fun bluetoothWrite(s: String) {
-        bluetoothService.write(s)
-        Log.d(channel, "write $s via bluetooth")
     }
 }

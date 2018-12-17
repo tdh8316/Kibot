@@ -5,7 +5,6 @@ import android.annotation.TargetApi
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.os.Build
-import android.util.Log
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -32,7 +31,7 @@ class BluetoothService {
                 }
                 throw Exception("No appropriate paired devices.")
             } else {
-                throw Exception("Bluetooth is disabled.")
+                throw UninitializedPropertyAccessException("Bluetooth is disabled.")
             }
         }
     }
