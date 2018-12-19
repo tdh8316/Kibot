@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 const platform = const MethodChannel("Kibot/client");
+var map = Map();
 
 void main() {
   runApp(new MaterialApp(home: MainActivity()));
@@ -46,6 +47,7 @@ bool showQuestionDialog(context, msg) {
   return false;
 }
 
+// Send data to Arduino via bluetooth
 Future<void> sendSignal(String s, BuildContext context) async {
   try {
     await platform.invokeMethod("bluetoothWrite", s);
@@ -121,14 +123,11 @@ class AllClassesActivity extends StatelessWidget {
         crossAxisCount: 5,
         children: <Widget>[
           MaterialButton(
-              onPressed: () => sendSignal("교무실", context),
-              child: Text("교무실", style: TextStyle(fontSize: 25))),
-          MaterialButton(
-              onPressed: () => sendSignal("화장실", context),
-              child: Text("화장실", style: TextStyle(fontSize: 25))),
+              onPressed: () => sendSignal("황은경 선생님", context),
+              child: Text("황은경 선생님", style: TextStyle(fontSize: 25))),
           MaterialButton(
               onPressed: () => sendSignal("엄재훈 선생님", context),
-              child: Text("엄재훈", style: TextStyle(fontSize: 25))),
+              child: Text("엄재훈 선생님", style: TextStyle(fontSize: 25))),
           MaterialButton(
               onPressed: () {
                 Navigator.pop(context);
