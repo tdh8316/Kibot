@@ -22,7 +22,7 @@ void setup() {
 void loop() {
     // Read target class via bluetooth
     if (Bluetooth.available()) {
-        targetId = Bluetooth.parseInt()
+        targetId = Bluetooth.parseInt();
     }
     log("Where I'll go is " + String(targetId));
 
