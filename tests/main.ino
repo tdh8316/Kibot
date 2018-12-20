@@ -7,6 +7,7 @@ SoftwareSerial Bluetooth(tx, rx);
 
 int bufferIndex = 0;
 
+char targetIdArray[3];
 int targetId;
 
 
@@ -21,10 +22,12 @@ void setup() {
 
 void loop() {
     // Read target class via bluetooth
-    if (Bluetooth.available()) {
-        targetId = Bluetooth.parseInt()
+    while (Bluetooth.available()) {
+        targetIdArray[bufferIndex] = (char) Bluetooth.read();
+        bufferIndex ++;
     }
-    log("Where I'll go is " + String(targetId));
+    targetId = atoi(targetIdArray);
+    log("Where I'll go is " + targetId);
 
     // Initialize buffer
     for (int i = 0; i < 4; i ++) {
