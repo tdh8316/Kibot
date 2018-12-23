@@ -5,12 +5,12 @@ Copyright 2018-2019. Donghyeok Tak
 
 SoftwareSerial Bluetooth(tx, rx);
 
-int bufferIndex = 0;
-
 int targetId;
 
 
-void log(String s) return Serial.println("DEBUG:" + s)
+void log(String s) {
+    Serial.println("DEBUG:" + s)
+}
 
 
 void setup() {
@@ -25,9 +25,4 @@ void loop() {
         targetId = Bluetooth.parseInt();
     }
     log("Where I'll go is " + String(targetId));
-
-    // Initialize buffer
-    for (int i = 0; i < 4; i ++) {
-        targetIdArray[i] = null;
-    } bufferIndex = 0;
 }
