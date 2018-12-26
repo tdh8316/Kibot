@@ -58,7 +58,7 @@ class AllClassesActivity extends StatelessWidget {
   MaterialButton button(context, int id) {
     return new MaterialButton(
         onPressed: () => sendSignal(id, context),
-        child: Text(map[id], style: TextStyle(fontSize: 25)));
+        child: Text(map[id.toString()], style: TextStyle(fontSize: 25)));
   }
 
   @override

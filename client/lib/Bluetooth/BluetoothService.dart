@@ -11,7 +11,7 @@ Future<void> sendSignal(int address, BuildContext context) async {
     return showMessageBox(
         context,
         "Failed to write via bluetooth."
-        "(adr=$address)(tch=${map[address]}) $e");
+        "(adr=$address)(tch=${map[address.toString()]}) $e");
   }
 
   return showMessageBox(
