@@ -11,11 +11,17 @@ Map<String, dynamic> map;
 void main() async {
   final response = await http.get("https://raw.githubusercontent.com/"
       "tdh8316/Kibot/master/"
-      "client/share/test.json"
-  );
-  if (response.statusCode != 200) throw Exception("Failed to access master/client/share/map.json");
+      "client/share/test.json");
+  if (response.statusCode != 200)
+    throw Exception("Failed to access master/client/share/map.json");
+  else
+    map = json.decode(response.body);
 
-  debugPrint(response.body);
-  map = json.decode(response.body);
-  runApp(new MaterialApp(home: MainActivity()));
+  // Remove all overlaid system ui
+  SystemChrome.setEnabledSystemUIOverlays([]);
+  // Locking the screen landscape
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft]);
+
+  runApp(MaterialApp(home: MainActivity()));
 }

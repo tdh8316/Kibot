@@ -1,18 +1,13 @@
 import 'package:client/Bluetooth/BluetoothService.dart';
 import 'package:client/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class MainActivity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Initialize bluetooth
     bluetoothInitialize(context);
-    // Remove all overlaid system ui
-    SystemChrome.setEnabledSystemUIOverlays([]);
-    // Locking the screen landscape
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft]);
+
     return MaterialApp(
       title: "Kibot client",
       home: Scaffold(
@@ -56,7 +51,7 @@ class MainActivity extends StatelessWidget {
 
 class AllClassesActivity extends StatelessWidget {
   MaterialButton button(context, int id) {
-    return new MaterialButton(
+    return MaterialButton(
         onPressed: () => sendSignal(id, context),
         child: Text(map[id.toString()], style: TextStyle(fontSize: 25)));
   }
