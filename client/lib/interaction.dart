@@ -35,6 +35,6 @@ void showMessageBox(context, msg) {
 }
 
 bool showQuestionDialog(context, msg) {
-  // TODO: May I help you?
+  // TODO: Asking dialog
   return false;
 }
