@@ -8,44 +8,51 @@ class MainActivity extends StatelessWidget {
     // Initialize bluetooth
     bluetoothInitialize(context);
 
-    return MaterialApp(
-      title: "Kibot client",
-      home: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(color: Colors.white),
-          child: Column(children: <Widget>[
-            Image.asset("assets/icon.png", scale: 2.5),
-            Center(child: Text("환영합니다", style: TextStyle(fontSize: 30))),
-            Center(child: Text("찾는 곳이 있으신가요?", style: TextStyle(fontSize: 32))),
-            Row(
-              children: <Widget>[
-                MaterialButton(
-                    child: Text("교무실",
-                        style: TextStyle(fontSize: 32, color: Colors.indigo)),
-                    onPressed: () => sendSignal(103, context),
-                    height: 128,
-                    minWidth: 216),
-                MaterialButton(
-                    child: Text("화장실",
-                        style: TextStyle(fontSize: 32, color: Colors.indigo)),
-                    onPressed: () => sendSignal(0, context),
-                    height: 128,
-                    minWidth: 216),
-                MaterialButton(
-                    child: Text("교실 더보기...",
-                        style: TextStyle(fontSize: 22, color: Colors.indigo)),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AllClassesActivity()));
-                    })
-              ],
-            )
-          ]),
+    return WillPopScope(
+        child: MaterialApp(
+          title: "Kibot client",
+          home: Scaffold(
+            body: Container(
+              decoration: BoxDecoration(color: Colors.white),
+              child: Column(children: <Widget>[
+                Image.asset("assets/icon.png", scale: 2.5),
+                Center(child: Text("환영합니다", style: TextStyle(fontSize: 30))),
+                Center(
+                    child:
+                        Text("찾는 곳이 있으신가요?", style: TextStyle(fontSize: 32))),
+                Row(
+                  children: <Widget>[
+                    MaterialButton(
+                        child: Text("교무실",
+                            style:
+                                TextStyle(fontSize: 32, color: Colors.indigo)),
+                        onPressed: () => sendSignal(103, context),
+                        height: 128,
+                        minWidth: 216),
+                    MaterialButton(
+                        child: Text("화장실",
+                            style:
+                                TextStyle(fontSize: 32, color: Colors.indigo)),
+                        onPressed: () => sendSignal(0, context),
+                        height: 128,
+                        minWidth: 216),
+                    MaterialButton(
+                        child: Text("교실 더보기...",
+                            style:
+                                TextStyle(fontSize: 22, color: Colors.indigo)),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AllClassesActivity()));
+                        })
+                  ],
+                )
+              ]),
+            ),
+          ),
         ),
-      ),
-    );
+        onWillPop: () => null);
   }
 }
 
