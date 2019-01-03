@@ -1,4 +1,4 @@
-import 'package:client/interaction.dart';
+import 'package:client/dialog.dart';
 import 'package:client/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

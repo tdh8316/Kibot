@@ -1,11 +1,9 @@
 package com.takturstudio.kibot.client
 
-import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.WindowManager
 import com.takturstudio.kibot.client.bluetooth.BluetoothService
 import io.flutter.app.FlutterActivity
