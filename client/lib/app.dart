@@ -63,6 +63,9 @@ class MainActivity extends StatelessWidget {
 
 class AllClassesActivity extends StatelessWidget {
   MaterialButton button(context, int id) {
+    if (map[id.toString()] == null) {
+      return MaterialButton(onPressed: null, child: Text(''));
+    }
     return MaterialButton(
         onPressed: () => sendSignal(id, context),
         child: Text(map[id.toString()], style: TextStyle(fontSize: 25)));
