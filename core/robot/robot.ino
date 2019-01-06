@@ -3,40 +3,18 @@
 */
 
 #include <SoftwareSerial.h>
+#include "Guide.h"
 
-#define tx 1
-#define rx 2
+#define Bluetooth_TX 1
+#define Bluetooth_RX 2
 
-
-class _Guide {
-  public:
-    int target;
-    void setTarget(int id);
-    float getCurrentPos();
-    bool isArrived();
-};
+SoftwareSerial Bluetooth(Bluetooth_TX, Bluetooth_RX);
+Guide Guide();
 
 
-_Guide Guide;
-SoftwareSerial Bluetooth(tx, rx);
 
-
-bool isGuidanceDone = true;
-
-
-void _Guide::setTarget(int _target_pos) {
-  target = _target_pos;
-}
-float _Guide::getCurrentPos() {
-  // TODO: DWM1000
-}
-bool _Guide::isArrived() {
-  // TODO: DWM1000
-}
-
-
-void log(String s) {
-  Serial.println("DEBUG:" + s);
+size_t log(String s) {
+  return Serial.println("LOG:" + s);
 }
 
 
@@ -48,21 +26,11 @@ void setup() {
 
 void loop() {
   // 블루투스 신호 대기
-  if (Bluetooth.available() && isGuidanceDone) {
-    Guide.setTarget(Bluetooth.parseInt());
-    isGuidanceDone = false;
+  if (Bluetooth.available()) {
+    Guide.begin(Bluetooth.parseInt());
   }
 
-  // 안내
-  while (!isGuidanceDone) {
-    if (Guide.getCurrentPos() < Guide.target) {
-      // TODO: GO STRAIGHT
-    }
-
-    if (Guide.isArrived()) {
-      // TODO: OUTPUT
-      // TODO: GO HOME
-      isGuidanceDone = true;
-    }
+  while (true) {
+    // TODO: Guide logic
   }
 }
