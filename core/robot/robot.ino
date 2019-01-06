@@ -3,7 +3,7 @@
 */
 
 #include <SoftwareSerial.h>
-#include "Guide.h"
+#include "Guide.hpp"
 
 #define Bluetooth_TX 1
 #define Bluetooth_RX 2
