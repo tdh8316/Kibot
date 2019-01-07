@@ -26,7 +26,6 @@ Future<String> readCache() async {
 
     // Read the file
     String contents = await file.readAsString();
-    print("Read=$contents");
     return contents;
   } catch (e) {
     return "error";

@@ -2,17 +2,9 @@ import 'package:client/Bluetooth/BluetoothService.dart';
 import 'package:client/main.dart';
 import 'package:flutter/material.dart';
 
-init(BuildContext context) async {
-  bluetoothInitialize(context);
-  print("Initialized");
-}
-
 class MainActivity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Initialize
-    init(context);
-
     return WillPopScope(
         child: MaterialApp(
           title: "Kibot client",

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:client/Bluetooth/BluetoothService.dart';
 import 'package:client/app.dart';
 import 'package:client/cache.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +24,10 @@ void main() async {
       throw Exception("Failed to read mapdata.json");
     }
   }
-  print(mapData);
   map = json.decode(mapData);
+
+  // Initialize Bluetooth
+  bluetoothInitialize();
 
   // Remove all overlaid system ui
   SystemChrome.setEnabledSystemUIOverlays([]);
