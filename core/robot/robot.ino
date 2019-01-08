@@ -10,36 +10,6 @@
 SoftwareSerial Bluetooth(Bluetooth_TX, Bluetooth_RX);
 
 
-class GuideCore {
-  public:
-  // Attribute
-  void init(void);
-  void begin(int);
-  void send();
-
-  // Property
-  bool isDone;
-  bool isArrived;
-  
-  private:
-  int getPos(void);
-  int _target;
-};
-
-void GuideCore::begin(int target) {
-  _target = target;
-  isDone = false;
-  isArrived = false;
-}
-void GuideCore::init() {
-  // TODO: 초기 지점으로 되돌아가기
-}
-int GuideCore::getPos() {
-  // TODO
-  return 0;
-}
-
-
 size_t log(String s) {
   return Serial.println("LOG:" + s);
 }
@@ -58,11 +28,7 @@ void loop() {
     Guide.begin(Bluetooth.parseInt());
   }
 
-  while (true) {
-    if (Guide.isArrived) {
-      Guide.init(); break;
-    } else {
-      
-    }
+  while (Guide.isDone) {
+
   }
 }

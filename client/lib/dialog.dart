@@ -18,7 +18,7 @@ void showMessageBox(context, msg) {
     builder: (BuildContext context) {
       // return object of type Dialog
       return AlertDialog(
-        title: Text("Something to tell..."),
+        title: Text("강원중학교 안내봇"),
         content: Text(msg),
         actions: <Widget>[
           // usually buttons at the bottom of the dialog

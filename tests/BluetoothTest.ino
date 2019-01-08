@@ -1,32 +1,18 @@
-/*
-  Copyright 2018-2019. Donghyeok Tak
-*/
-
 #include <SoftwareSerial.h>
 
-#define Bluetooth_TX 2
-#define Bluetooth_RX 3
-
-SoftwareSerial Bluetooth(Bluetooth_TX, Bluetooth_RX);
-
-
-size_t log(String s) {
-  return Serial.println("LOG:" + s);
-}
-
+SoftwareSerial BTSerial(2, 3);   //bluetooth module Tx:Digital 2 Rx:Digital 3
 
 void setup() {
   Serial.begin(9600);
-  Bluetooth.begin(9600);
+  BTSerial.begin(9600);
+  Serial.println("Kibot Bluetooth test");
 }
 
-
 void loop() {
-  // 블루투스 신호 대기
-  if (Bluetooth.available()) {
-    log(Bluetooth.parseInt());
-  } else {
-    log("Failed to connect Bluetooth");
+  if (BTSerial.available()) {
+    Seria.println(String(BTSerial.parseInt()));
   }
-  delay(1000);
+  if (Serial.available()) {
+    BTSerial.write(Serial.read());
+  }
 }

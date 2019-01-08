@@ -12,7 +12,6 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
 import me.aflak.bluetooth.Bluetooth
 import me.aflak.bluetooth.DiscoveryCallback
-import java.net.ConnectException
 
 
 @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -35,7 +34,8 @@ class MainActivity : FlutterActivity() {
                     if (bluetoothInit()) {
                         result.success(null)
                     } else {
-                        showDialog("Kibot 과 연결하는데 실패했습니다.", "PANIC")
+                        showDialog("미안해요 Kibot이랑 연결이 안되네요 ㅠㅠ\n" +
+                        "아마 너무 멀리있거나 전원이 꺼져있는 것 같아요!")
                     }
                 }
 
@@ -91,12 +91,12 @@ class MainActivity : FlutterActivity() {
     private fun bluetoothWrite(str: String) {
         Log.d(TAG, "Bluetooth connected:(${bluetooth.isConnected})")
         if (!bluetooth.isConnected) {
-            showDialog("현재 Kibot 과 연결할 수 없습니다.")
+            throw UninitializedPropertyAccessException()
         }
         bluetooth.send(str)
     }
 
-    private fun showDialog(msg: String, title: String = "Kibot client") {
+    private fun showDialog(msg: String, title: String = "강원중학교 안내봇") {
         val builder = AlertDialog.Builder(this)
         builder.setTitle(title)
         builder.setMessage(msg)

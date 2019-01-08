@@ -17,7 +17,11 @@
 .idea/
 
 # Visual Studio Code related
-.vscode/
+.vscode/arduino.json
+.vscode/c_cpp_properties.json
+.project
+.classpath
+*.prefs
 
 # Flutter/Dart/Pub related
 **/doc/api/
