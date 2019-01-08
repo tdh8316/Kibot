@@ -12,6 +12,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
 import me.aflak.bluetooth.Bluetooth
 import me.aflak.bluetooth.DiscoveryCallback
+import java.net.ConnectException
 
 
 @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -30,15 +31,14 @@ class MainActivity : FlutterActivity() {
         MethodChannel(flutterView, channel).setMethodCallHandler { call, result ->
             when (call.method.toString()) {
                 "bluetoothInit" -> {
-                    try {
-                        Log.d(TAG, "Request: Bluetooth Init")
-                        bluetoothInit()
+                    Log.d(TAG, "Request: Bluetooth Init")
+                    if (bluetoothInit()) {
                         result.success(null)
-                    } catch (e: Exception) {
-                        Log.d(this.channel, e.toString())
-                        result.error(e.toString(), null, null)
+                    } else {
+                        showDialog("Kibot 과 연결하는데 실패했습니다.", "PANIC")
                     }
                 }
+
                 "bluetoothWrite" -> {
                     try {
                         bluetoothWrite(call.arguments.toString())
@@ -58,7 +58,7 @@ class MainActivity : FlutterActivity() {
         // startActivity(Intent(this, MainActivity::class.java))
     }
 
-    private fun bluetoothInit() {
+    private fun bluetoothInit(): Boolean {
         bluetooth.onStart()
         bluetooth.enable()
         bluetooth.setDiscoveryCallback(object : DiscoveryCallback {
@@ -84,19 +84,16 @@ class MainActivity : FlutterActivity() {
         device.createBond()
         device.setPin(byteArrayOf(1234.toByte()))
         bluetooth.connectToDevice(device)
+        Thread.sleep(1000L)
+        return bluetooth.isConnected
     }
 
     private fun bluetoothWrite(str: String) {
         Log.d(TAG, "Bluetooth connected:(${bluetooth.isConnected})")
         if (!bluetooth.isConnected) {
             showDialog("현재 Kibot 과 연결할 수 없습니다.")
-            return
         }
-        try {
-            bluetooth.send(str)
-        } catch (e: NullPointerException) {
-            throw UninitializedPropertyAccessException("Kibot 과 연결하는데 실패했습니다.")
-        }
+        bluetooth.send(str)
     }
 
     private fun showDialog(msg: String, title: String = "Kibot client") {
