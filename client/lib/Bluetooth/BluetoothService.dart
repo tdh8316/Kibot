@@ -22,11 +22,5 @@ Future<void> sendSignal(int address, BuildContext context) async {
 }
 
 bluetoothInitialize() async {
-  try {
-    await platform.invokeMethod("bluetoothInit");
-  } on PlatformException catch (e) {
-    return showToast("Failed to initialize bluetooth. $e",
-        length: Toast.LENGTH_LONG);
-  }
-  return showToast("Bluetooth initialized successfully.");
+  await platform.invokeMethod("bluetoothInit");
 }

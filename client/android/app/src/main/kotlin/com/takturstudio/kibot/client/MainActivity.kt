@@ -31,12 +31,8 @@ class MainActivity : FlutterActivity() {
             when (call.method.toString()) {
                 "bluetoothInit" -> {
                     Log.d(TAG, "Request: Bluetooth Init")
-                    if (bluetoothInit()) {
-                        result.success(null)
-                    } else {
-                        showDialog("미안해요 Kibot이랑 연결이 안되네요 ㅠㅠ\n" +
-                        "아마 너무 멀리있거나 전원이 꺼져있는 것 같아요!")
-                    }
+                    bluetoothInit()
+                    result.success(null)
                 }
 
                 "bluetoothWrite" -> {
@@ -58,7 +54,7 @@ class MainActivity : FlutterActivity() {
         // startActivity(Intent(this, MainActivity::class.java))
     }
 
-    private fun bluetoothInit(): Boolean {
+    private fun bluetoothInit() {
         bluetooth.onStart()
         bluetooth.enable()
         bluetooth.setDiscoveryCallback(object : DiscoveryCallback {
@@ -84,8 +80,6 @@ class MainActivity : FlutterActivity() {
         device.createBond()
         device.setPin(byteArrayOf(1234.toByte()))
         bluetooth.connectToDevice(device)
-        Thread.sleep(1000L)
-        return bluetooth.isConnected
     }
 
     private fun bluetoothWrite(str: String) {
