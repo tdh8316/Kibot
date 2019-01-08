@@ -2,6 +2,7 @@ package com.takturstudio.kibot.client
 
 import android.annotation.TargetApi
 import android.app.AlertDialog
+import android.bluetooth.BluetoothDevice
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -9,13 +10,16 @@ import android.view.WindowManager
 import io.flutter.app.FlutterActivity
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
+import me.aflak.bluetooth.Bluetooth
+import me.aflak.bluetooth.DiscoveryCallback
 
 
 @TargetApi(Build.VERSION_CODES.KITKAT)
 class MainActivity : FlutterActivity() {
     private val TAG = MainActivity::class.java.simpleName
     private val channel = "Kibot/client"
-    private val MAC = "EF:F3:0D:AB:49:A3"
+    private var bluetooth: Bluetooth = Bluetooth(this)
+    private val bluetoothName: String = "KIBOT"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,33 +59,49 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun bluetoothInit() {
-        //("EF:F3:0D:AB:49:A3")
-        /*if (blueAdapter != null && blueAdapter.isEnabled) {
-            val bondedDevices = blueAdapter.bondedDevices
-            if (bondedDevices.size > 0) {
-                val devices = bondedDevices.toTypedArray() as Array<*>
-                Log.d("Bluetooth Initializer", "Bonded devices: $devices")
-                val device = devices[0] as BluetoothDevice
-                val uuids = device.uuids
-                val socket = device.createRfcommSocketToServiceRecord(uuids[0].uuid)
-                socket.connect()
-                Log.d("Is socket connected", socket.isConnected.toString())
-                outputStream = socket.outputStream
-                inStream = socket.inputStream
-            } else {
-                Log.d("Bluetooth Initializer", "No bonded devices")
-                throw NoSuchElementException("No bonded devices!")
+        bluetooth.onStart()
+        bluetooth.enable()
+        bluetooth.setDiscoveryCallback(object : DiscoveryCallback {
+            override fun onDiscoveryStarted() {}
+            override fun onDiscoveryFinished() {}
+            override fun onDeviceFound(device: BluetoothDevice) {
+                Log.d(TAG, "Bluetooth Found: name=${device.name} address=${device.address} " +
+                        "uuids=${device.uuids}")
             }
-        }*/
+
+            override fun onDevicePaired(device: BluetoothDevice) {
+                Log.d(TAG, "Bluetooth Paired: name=${device.name} address=${device.address} " +
+                        "uuids=${device.uuids}")
+            }
+
+            override fun onDeviceUnpaired(device: BluetoothDevice) {}
+            override fun onError(message: String) {}
+        })
+        Log.d(TAG, "Trying to connect slave-bluetooth($bluetoothName)")
+        val devices = bluetooth.pairedDevices
+        val device = devices[0]
+        Log.d(TAG, "Paired bluetooth devices: $devices\nConnecting to $device...")
+        device.createBond()
+        device.setPin(byteArrayOf(1234.toByte()))
+        bluetooth.connectToDevice(device)
     }
 
     private fun bluetoothWrite(str: String) {
-        dialogShow(str)
+        Log.d(TAG, "Bluetooth connected:(${bluetooth.isConnected})")
+        if (!bluetooth.isConnected) {
+            showDialog("현재 Kibot 과 연결할 수 없습니다.")
+            return
+        }
+        try {
+            bluetooth.send(str)
+        } catch (e: NullPointerException) {
+            throw UninitializedPropertyAccessException("Kibot 과 연결하는데 실패했습니다.")
+        }
     }
 
-    private fun dialogShow(msg: String) {
+    private fun showDialog(msg: String, title: String = "Kibot client") {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Native Dialog")
+        builder.setTitle(title)
         builder.setMessage(msg)
         builder.setPositiveButton("OK", null)
         builder.show()
