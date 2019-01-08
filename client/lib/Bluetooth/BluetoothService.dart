@@ -2,7 +2,6 @@ import 'package:client/dialog.dart';
 import 'package:client/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 // Send data to Arduino via bluetooth
 Future<void> sendSignal(int address, BuildContext context) async {
