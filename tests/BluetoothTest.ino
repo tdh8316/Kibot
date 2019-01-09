@@ -10,7 +10,7 @@ void setup() {
 
 void loop() {
   if (BTSerial.available()) {
-    Seria.println(String(BTSerial.parseInt()));
+    Serial.println(String(BTSerial.parseInt()));
   }
   if (Serial.available()) {
     BTSerial.write(Serial.read());
