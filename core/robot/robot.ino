@@ -2,10 +2,11 @@
   Copyright 2018-2019. Donghyeok Tak
 */
 
+#include <Arduino.h>
 #include <SoftwareSerial.h>
 
-#define Bluetooth_TX 1
-#define Bluetooth_RX 2
+#define Bluetooth_TX 2
+#define Bluetooth_RX 3
 
 SoftwareSerial Bluetooth(Bluetooth_TX, Bluetooth_RX);
 
@@ -22,13 +23,8 @@ void setup() {
 
 
 void loop() {
-  Guide = new GuideCore;
   // 블루투스 신호 대기
   if (Bluetooth.available()) {
-    Guide.begin(Bluetooth.parseInt());
-  }
-
-  while (Guide.isDone) {
-
+    log(Bluetooth.parseInt());
   }
 }
