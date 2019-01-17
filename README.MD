@@ -1,7 +1,6 @@
 # 개요
 `Kibot`은 강원중학교 안내 로봇입니다.
 
-[Kibot Homepage](https://tdh8316.github.io/Kibot/)
 
 ## Project structure
     .
