@@ -1,4 +1,4 @@
-# Overview
+# 개요
 `Kibot`은 강원중학교 안내 로봇입니다.
 
 [Kibot Homepage](https://tdh8316.github.io/Kibot/)
@@ -28,6 +28,12 @@ Kibot client 은 애플리케이션 인스턴스가 시작될 때 마다 `client
 모든 위젯은 동적으로 갱신되지는 않지만 다음 실행시부터 변경 사항이 반영됩니다.
 
 교실이 변경되었을 때 `client/share/classinfo.json`를 알맞게 수정해 `update request` label 을 붙여 issue를 작성하거나 이메일 (tdh8316@naver.com) 등을 이용해 연락을 취해주세요.
+
+## 왜 Client에 Flutter를 사용했나요? 그냥 Java로 만들 것이지...
+![dart-lang](./docs/dart-color.png)
+Flutter에서 사용하는 Dart 언어의 색이 [Github Languages Color](https://github.com/github/linguist) 에서 너무 이뻐요!
+![dart-lang](./docs/dart-color.png)
+
 
 # 진행 상태
  - [ ] DWM1000 을 사용한 실시간 실내위치인식 체계
