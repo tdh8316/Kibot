@@ -47,6 +47,11 @@ void setup() {
   Serial.print("Device mode: "); Serial.println(msg);
 }
 
+void communicate() {
+  // https://kocoafab.cc/tutorial/view/451
+  Serial.print(DW1000Ng::getReceivePower());
+}
+
 void loop() {
   DW1000Ng::startReceive();
   while (!DW1000Ng::isReceiveDone()) {
@@ -56,7 +61,10 @@ void loop() {
   }
   DW1000Ng::clearReceiveStatus();
   DW1000Ng::getReceivedData(message);
-  Serial.print("Data is ... "); Serial.println(message);
-  Serial.print("RX power is [dBm] ... "); Serial.println(DW1000Ng::getReceivePower());
-  Serial.print("Signal quality is ... "); Serial.println(DW1000Ng::getReceiveQuality());
+  /*
+    Serial.print("Data is ... "); Serial.println(message);
+    Serial.print("RX power is [dBm] ... "); Serial.println(DW1000Ng::getReceivePower());
+    Serial.print("Signal quality is ... "); Serial.println(DW1000Ng::getReceiveQuality());
+  */
+  communicate();
 }
