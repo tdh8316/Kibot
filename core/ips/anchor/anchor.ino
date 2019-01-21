@@ -7,7 +7,6 @@ const uint8_t PIN_SS = 15; // spi select pin
 const uint8_t PIN_SS = SS; // spi select pin
 #endif
 
-
 volatile unsigned long delaySent = 0;
 
 device_configuration_t DEFAULT_CONFIG = {
@@ -51,8 +50,8 @@ void setup() {
 
 void transmit() {
   Serial.println("Transmitting packet ...")
-  String msg = "Kibot indoor positioning system"
-               DW1000Ng::setTransmitData(msg);
+  String msg = "Kibot indoor positioning system";
+  DW1000Ng::setTransmitData(msg);
   delay(100);
   DW1000Ng::startTransmit(TransmitMode::IMMEDIATE);
   delaySent = millis();
