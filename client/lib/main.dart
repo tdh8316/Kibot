@@ -12,9 +12,14 @@ Map<String, dynamic> map;
 String mapData;
 
 void main() async {
+  var response;
   try {
-    final response = await http.get("https://raw.githubusercontent.com/"
+    response = await http.get("https://raw.githubusercontent.com/"
         "tdh8316/Kibot/master/client/share/test.json");
+    if (response.statusCode != 200) {
+      response = await http.get("https://raw.githubusercontent.com/"
+        "tdh8316/Kibot/master/client/share/classinfo.json");
+    }
     mapData = response.body;
     writeCache(mapData);
   } on Exception {
