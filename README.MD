@@ -30,7 +30,7 @@ Kibot client 은 애플리케이션 인스턴스가 시작될 때 마다 `client
 
 ## 왜 Client에 Flutter를 사용했나요? 그냥 Java로 만들 것이지...
 ![dart-lang](./docs/dart-color.png)
-Flutter에서 사용하는 Dart 언어의 색이 [Github Languages Color](https://github.com/github/linguist) 에서 너무 이뻐요!
+Flutter에서 사용하는 Dart 언어의 색이 [Github linguist](https://github.com/github/linguist) 에서 너무 이뻐요!
 ![dart-lang](./docs/dart-color.png)
 
 
