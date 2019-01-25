@@ -1,7 +1,6 @@
 package com.takturstudio.tdh8316.kibot.client
 
 import android.Manifest
-import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
