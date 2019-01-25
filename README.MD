@@ -28,14 +28,16 @@ Kibot client 은 애플리케이션 인스턴스가 시작될 때 마다 `client
 
 교실이 변경되었을 때 `client/share/classinfo.json`를 알맞게 수정해 `update request` label 을 붙여 issue를 작성하거나 이메일 (tdh8316@naver.com) 등을 이용해 연락을 취해주세요.
 
-## 왜 Client에 Flutter를 사용했나요? 그냥 Java로 만들 것이지...
+## 왜 Client에 `Flutter/Kotlin`을 사용했나요? 그냥 Java로 만들 것이지...
 ![dart-lang](./docs/dart-color.png)
 Flutter에서 사용하는 Dart 언어의 색이 [Github linguist](https://github.com/github/linguist) 에서 너무 이뻐요!
 ![dart-lang](./docs/dart-color.png)
 
+그리고 저는 `Java`가 싫어요
+
 
 # 진행 상태
- - [ ] DWM1000 을 사용한 실시간 실내위치인식 체계
+ - [x] DWM1000 을 사용한 실시간 실내위치인식 체계 - `Arduino Uno`를 사용한 배선도 튜토리얼 추가 예정
  - [ ] 초음파센서를 사용해 엘리베이터 타기
  - [ ] 원래 위치로 돌아오기
  - [x] DC모터 연결하기
