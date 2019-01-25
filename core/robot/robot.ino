@@ -1,8 +1,12 @@
 /*
   Copyright 2018-2019. Donghyeok Tak
+  Required Arduino Mega
 */
 
 #include <SoftwareSerial.h>
+
+#define BLUETOOTH "Bluetooth"
+#define DWM1000 "DWM1000"
 
 #define Bluetooth_TX 2
 #define Bluetooth_RX 3
@@ -11,13 +15,13 @@
 SoftwareSerial Bluetooth(Bluetooth_TX, Bluetooth_RX);
 
 
-size_t log(String s) {
-  return Serial.println("LOG:" + s);
+size_t log(String TAG, String MESSAGE) {
+  return Serial.println(TAG + ":" + MESSAGE);
 }
 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Bluetooth.begin(9600);
 
   // DC모터
@@ -45,7 +49,11 @@ void moveStop() {
 void loop() {
   // 블루투스 신호 대기
   if (Bluetooth.available()) {
-    log(String(Bluetooth.parseInt()));
-    moveForward();
+    log(BLUETOOTH, String(Bluetooth.parseInt()));
+  }
+
+  // DWM1000 위치신호 대기
+  if (Serial.available()) {
+    log(DWM1000, String(Serial.parseFloat());
   }
 }
