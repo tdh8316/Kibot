@@ -58,6 +58,6 @@ void loop() {
   // DWM1000 위치신호 대기
   // http://www.hardcopyworld.com/ngine/aduino/index.php/archives/740
   if (Serial.available()) {
-    log(DWM1000, String(Serial.parseFloat());
+    log(DWM1000, String(Serial.parseFloat()));
   }
 }
