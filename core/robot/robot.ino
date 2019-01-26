@@ -52,7 +52,7 @@ void moveStop() {
 void loop() {
   // 블루투스 신호 대기
   if (Bluetooth.available()) {
-    log(BLUETOOTH, String(Bluetooth.parseFloat())));
+    log(BLUETOOTH, String(Bluetooth.parseFloat()));
   }
 
   // DWM1000 위치신호 대기
