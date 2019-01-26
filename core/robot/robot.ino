@@ -49,10 +49,11 @@ void moveStop() {
 void loop() {
   // 블루투스 신호 대기
   if (Bluetooth.available()) {
-    log(BLUETOOTH, String(Bluetooth.parseInt()));
+    log(BLUETOOTH, String(Bluetooth.parseFloat())));
   }
 
   // DWM1000 위치신호 대기
+  // http://www.hardcopyworld.com/ngine/aduino/index.php/archives/740
   if (Serial.available()) {
     log(DWM1000, String(Serial.parseFloat());
   }
