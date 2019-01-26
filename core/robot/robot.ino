@@ -14,6 +14,9 @@
 
 SoftwareSerial Bluetooth(Bluetooth_TX, Bluetooth_RX);
 
+// On Arduino MEGA, the double implementation is exactly the same as the float, with no gain in precision.
+float pos_x, pos_y, pos_destination;
+
 
 size_t log(String TAG, String MESSAGE) {
   return Serial.println(TAG + ":" + MESSAGE);
