@@ -1,6 +1,7 @@
 package com.takturstudio.tdh8316.kibot.client
 
 import android.Manifest
+import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -8,32 +9,35 @@ import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
+import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import kotlinx.android.synthetic.main.activity_main.*
+import me.aflak.bluetooth.Bluetooth
+import me.aflak.bluetooth.DiscoveryCallback
 import java.util.*
 import kotlin.system.exitProcess
 
-
 class MainActivity : AppCompatActivity() {
 
-    private val mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(
-        this
-    )
+    private val mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
     private val mSpeechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+
+    private val bluetooth = Bluetooth(this)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        buttonListening.setOnClickListener {
-            mSpeechRecognizer.startListening(mSpeechRecognizerIntent)
-        }
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
+        window.addFlags(524288)
 
         requestPermissions()
         initSpeechRecognizer()
+        initBluetooth()
+        initWidgets()
     }
 
     private fun requestPermissions() {
@@ -120,5 +124,49 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
+    }
+
+    private fun initBluetooth() {
+        bluetooth.onStart()
+        bluetooth.enable()
+        bluetooth.setDiscoveryCallback(object : DiscoveryCallback {
+            override fun onDiscoveryStarted() {}
+            override fun onDiscoveryFinished() {}
+            override fun onDeviceFound(device: BluetoothDevice) {
+                Log.d(
+                    LOG_BLUETOOTH, "Bluetooth Found: name=${device.name}, address=${device.address}"
+                )
+            }
+
+            override fun onDevicePaired(device: BluetoothDevice) {
+                Log.d(
+                    LOG_BLUETOOTH, "Bluetooth Paired: name=${device.name}, address=${device.address}"
+                )
+            }
+
+            override fun onDeviceUnpaired(device: BluetoothDevice) {}
+            override fun onError(message: String) {}
+        })
+        Log.d(LOG_BLUETOOTH, "Trying to connect a slave-bluetooth($KIBOT_BLUETOOTH_NAME)")
+        val devices = bluetooth.pairedDevices
+        val device = devices[0]
+        Log.d(LOG_BLUETOOTH, "Paired bluetooth devices: $devices\nConnecting to $device...")
+        device.createBond()
+        device.setPin(byteArrayOf(1234.toByte()))
+        bluetooth.connectToDevice(device)
+    }
+
+    private fun initWidgets() {
+        buttonListening.setOnClickListener {
+            mSpeechRecognizer.startListening(mSpeechRecognizerIntent)
+        }
+    }
+
+    fun sendToKibot(messageSend: Any) {
+        bluetooth.send(messageSend.toString())
+    }
+
+    fun receiveFromKibot(): String? {
+        return String()
     }
 }
