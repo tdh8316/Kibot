@@ -1,7 +1,7 @@
 # Kibot
 `Kibot` 은 `Arduino Uno R3` 2 개와 1개의 `Arduino MEGA 2560 R3`로 제작되었습니다.
 
-실내 위치 측정을 위해 `Arduino Uno R3` 와 `DWM1000`을 사용했고, 로봇 본체에는 `Arduino MEGA 2560 R3`이 사용되었습니다.
+실내 위치 측정을 위해 [Arduino Uno R3](https://store.arduino.cc/usa/arduino-uno-rev3) 와 [DWM1000](https://store.arduino.cc/usa/arduino-uno-rev3)을 사용했고, 로봇 본체에는 [Arduino MEGA 2560 R3](https://store.arduino.cc/usa/arduino-mega-2560-rev3)이 사용되었습니다.
 
 Spec | `Arduino Uno R3` | `Arduino MEGA 2560 R3`
 ---- | ---------------- | ----------------------
