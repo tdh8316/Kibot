@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.WindowManager
 import me.aflak.bluetooth.Bluetooth
 import me.aflak.bluetooth.DiscoveryCallback
@@ -22,6 +23,11 @@ class MainActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
         window.addFlags(524288) // FLAG_SHOW_WHEN_LOCKED
 
+        val initThread = Thread { initClassInfo() }
+        initThread.start(); initThread.join()
+        if (classInfo == null) {
+            // TODO: Read cache from internal storage
+        }
         initBluetooth()
     }
 
