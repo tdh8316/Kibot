@@ -66,6 +66,10 @@ class MainActivity : AppCompatActivity() {
         bluetooth.onStop()
     }
 
+    override fun onBackPressed() {
+        return
+    }
+
     override fun onUserLeaveHint() {
         // INFO: DO NOT EDIT THIS SECTION
         // startActivity(Intent(this, MainActivity::class.java))
