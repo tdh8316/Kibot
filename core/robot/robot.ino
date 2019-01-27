@@ -67,9 +67,10 @@ void untilArrival() {
     if (Serial.available())
       pos_x = Serial.readString().toFloat();
 
-    if (pos_x < x_min) // 앞으로
-    if (pos_x > x_max) // 뒤로
-
+    if (pos_x < x_min) { // 앞으로
+    }
+    if (pos_x > x_max) {// 뒤로
+    }
   }
 
   Serial.println("ARRIVED!!!");
