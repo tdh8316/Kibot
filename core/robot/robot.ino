@@ -55,25 +55,46 @@ void moveStop() {
   analogWrite(11, 0);
 }
 
+// 도착할 때 까지 계속 반복
+void untilArrival() {
+  while (!(classroomRange[0] < pos_x && classroomRange[1] >= pos_x)) {
+    // DWM1000 위치신호 대기
+    // http://www.hardcopyworld.com/ngine/aduino/index.php/archives/740
+    if (Serial.available())
+      pos_x = Serial.readString().toFloat();
+
+
+    Serial.println("KEEP GOING...");
+
+  }
+
+  Serial.println("ARRIVED!!!");
+
+}
 
 void loop() {
   // 블루투스 신호 대기
-  int rangeIndex = 0;
-  while (Bluetooth.available()) {
-    float parsedFloat = Serial.parseFloat();
-    if (rangeIndex < 2)
-      classroomRange[rangeIndex] = parsedFloat;
-    rangeIndex ++;
+  if (Bluetooth.available()) {
+    setRange(Bluetooth.parseInt());
   }
 
-  // DWM1000 위치신호 대기
-  // http://www.hardcopyworld.com/ngine/aduino/index.php/archives/740
-  if (Serial.available()) {
-    pos_x = Serial.readString().toFloat();
+  if (classroomRange[0] == classroomRange[1]) {
+    log("ERROR", "Invalid range");
+    return;
   }
 
-  if (classroomRange[0] < pos_x < classroomRange[1])
-    Serial.println("RANGE IN");
 
-  delay(SERIAL_TIMEOUT);
+  untilArrival();
+  // TODO: 원점으로 돌아가기
+}
+
+void setRange(int id) {
+  switch (id) {
+    case 101:
+      classroomRange[0] = 1.5; classroomRange[1] = 2.5;
+      break;
+
+    default:
+      classroomRange[0] = 0; classroomRange[1] = 0;
+  }
 }
