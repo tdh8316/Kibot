@@ -57,14 +57,18 @@ void moveStop() {
 
 // 도착할 때 까지 계속 반복
 void untilArrival() {
-  while (!(classroomRange[0] < pos_x && classroomRange[1] >= pos_x)) {
+  float x_min = classroomRange[0];
+  float x_max = classroomRange[1];
+  // 1차원 공간: (x_min < pos_x && x_max >= pos_x)
+  // 2차원 공간: (x >= min_x && x <= max_x) && (y >= min_y && y <= max_y)
+  while (!(x_min < pos_x && x_max >= pos_x)) {
     // DWM1000 위치신호 대기
     // http://www.hardcopyworld.com/ngine/aduino/index.php/archives/740
     if (Serial.available())
       pos_x = Serial.readString().toFloat();
 
-
-    Serial.println("KEEP GOING...");
+    if (pos_x < x_min) // 앞으로
+    if (pos_x > x_max) // 뒤로
 
   }
 
