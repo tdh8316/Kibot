@@ -2,18 +2,25 @@ package com.tdh8316.kibot.client
 
 import android.app.AlertDialog
 import android.bluetooth.BluetoothDevice
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.WindowManager
 import me.aflak.bluetooth.Bluetooth
 import me.aflak.bluetooth.DiscoveryCallback
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
 
     private var bluetooth: Bluetooth = Bluetooth(this)
+
+    private val mSpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
+    private val mSpeechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +36,51 @@ class MainActivity : AppCompatActivity() {
             // TODO: Read cache from internal storage
         }
         initBluetooth()
+        initSpeechRecognizer()
+    }
+
+    private fun initSpeechRecognizer() {
+        mSpeechRecognizerIntent.putExtra(
+            RecognizerIntent.EXTRA_LANGUAGE,
+            Locale.getDefault()
+        )
+
+        mSpeechRecognizer.setRecognitionListener(object : RecognitionListener {
+            override fun onReadyForSpeech(bundle: Bundle) {}
+            override fun onBeginningOfSpeech() {}
+            override fun onRmsChanged(v: Float) {}
+            override fun onBufferReceived(bytes: ByteArray) {}
+            override fun onEndOfSpeech() {}
+            override fun onPartialResults(bundle: Bundle) {}
+            override fun onEvent(i: Int, bundle: Bundle) {}
+            override fun onError(err: Int) {
+                val errorMessage: String = when (err) {
+                    SpeechRecognizer.ERROR_SPEECH_TIMEOUT ->
+                        "제가 참을성이 없어서 이렇게 길게는 못듣겠네요 ><"
+                    SpeechRecognizer.ERROR_SERVER, SpeechRecognizer.ERROR_NETWORK_TIMEOUT ->
+                        "앗 갑자기 귀가 안들려엇..."
+                    SpeechRecognizer.ERROR_AUDIO ->
+                        "오류: 오디오 녹음 실패"
+                    SpeechRecognizer.ERROR_RECOGNIZER_BUSY ->
+                        "이미 듣고 있는데요옹 ??"
+                    SpeechRecognizer.ERROR_NO_MATCH ->
+                        "무슨말인지 잘 모르겠어요 ㅠㅠ"
+                    else ->
+                        "└(๑•̀o•́๑)┐ 상상도 못한 오류! 코드 $err."
+                }
+
+                AlertDialog.Builder(this@MainActivity).setTitle("")
+                    .setMessage(errorMessage).setPositiveButton("확인")
+                    { _, _ -> }.show()
+            }
+
+            override fun onResults(result: Bundle) {
+                //getting recognized stuff
+                sendToKibot(
+                    result.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0]
+                )
+            }
+        })
     }
 
     private fun initBluetooth() {
@@ -55,6 +107,7 @@ class MainActivity : AppCompatActivity() {
         if (!bluetooth.isConnected) {
             showDialog("└(๑•Kibot 과 연결되어있지 않아요...•́๑)┐")
         } else {
+            // TODO: Tokenize Korean
             bluetooth.send(str)
         }
     }
