@@ -97,7 +97,7 @@ void loop() {
   if (status == WORKING) untilArrival();
 
   // 원점으로 돌아가기는 loop 함수 안에서 실행되어야 함 (돌아가는 도중 안내 요청 고려)
-  if (status == GOBACK) Serial.println("GOING BACK...") // TODO: 원점으로 돌아가기
+  if (status == GOBACK) Serial.println("GOING BACK..."); // TODO: 원점으로 돌아가기
 
   status = IDLE;
 }
