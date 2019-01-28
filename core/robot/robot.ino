@@ -10,7 +10,6 @@
 #define BLUETOOTH_RX 3
 #define IDLE "i"
 #define WORKING "w"
-#define SIGNALSENT "s"
 #define GOBACK "g"
 
 #define BLUETOOTH "Bluetooth"
@@ -88,14 +87,14 @@ void loop() {
   // 블루투스 신호 대기
   if (Bluetooth.available() && (status == IDLE || status == GOBACK)) {
     setRange(Bluetooth.parseInt());
-    status = SIGNALSENT;
+    status = WORKING;
   }
 
   if (classroomRange[0] == classroomRange[1]) {
     log("ERROR", "Invalid range"); return;
   }
 
-  if (status == SIGNALSENT) untilArrival();
+  if (status == WORKING) untilArrival();
 
   // 원점으로 돌아가기는 loop 함수 안에서 실행되어야 함 (돌아가는 도중 안내 요청 고려)
   if (status == GOBACK) Serial.println("GOING BACK...") // TODO: 원점으로 돌아가기
