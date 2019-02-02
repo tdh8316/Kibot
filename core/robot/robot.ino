@@ -63,11 +63,11 @@ void moveStop() {
 void setRange(int id = -1) {
   switch (id) {
     case 101:
-      classroomRange[0] = 1.5; classroomRange[1] = 2.5;
+      x_min = 1.5; x_max = 2.5;
       break;
 
     default:
-      classroomRange[0] = 0; classroomRange[1] = 0;
+      x_min = 0; x_max = 0;
   }
 }
 
