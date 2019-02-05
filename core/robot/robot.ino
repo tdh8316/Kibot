@@ -12,6 +12,10 @@
 #define x_min classroomRange[0]
 #define x_max classroomRange[1]
 
+#define GUIDING 1
+#define BACKING -1
+#define IDLE 0
+
 #define BLUETOOTH "Bluetooth"
 #define DWM1000 "DWM1000"
 
@@ -24,6 +28,10 @@ float pos_x, pos_y = 0;
 
 // The range of the classrooms
 float classroomRange[2] = {0, 0};
+
+
+// Status
+int status = IDLE;
 
 
 size_t log(String TAG, String MESSAGE) {
@@ -88,12 +96,18 @@ void loop() {
   // 1차원 공간: (x_min < pos_x && x_max >= pos_x)
   // 2차원 공간: (x >= min_x && x <= max_x) && (y >= min_y && y <= max_y)
 
-  while (!(x_min < pos_x && x_max >= pos_x)) {
+  if (!(x_min < pos_x && x_max >= pos_x)) status = GUIDING;
+  else {
+    // TODO: BACK, IDLE
+  }
+
+  if (status == GUIDING) {
     // 1차원 공간에 대한 안내논리
     // DWM1000 위치신호 대기
     // http://www.hardcopyworld.com/ngine/aduino/index.php/archives/740
     if (Serial.available())
-      pos_x = Serial.readString().toFloat();
+      pos_x = Serial.readString().toFloat(); // TODO: if it's not a zero
+      // 1-d guide; DO NOT DECLARE pos_y
 
     log(DWM1000, String(pos_x));
 
@@ -101,11 +115,5 @@ void loop() {
     }
     if (pos_x > x_max) {// 뒤로
     }
-
-    delay(SERIAL_TIMEOUT);
   }
-
-  // Init after arrive
-  x_min = 0;
-  x_max = 0;
 }
