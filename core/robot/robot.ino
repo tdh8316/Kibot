@@ -9,6 +9,7 @@
 #define SERIAL_TIMEOUT 100
 #define BLUETOOTH_TX 2
 #define BLUETOOTH_RX 3
+#define RANGE_DEF -2
 #define x_min classroomRange[0]
 #define x_max classroomRange[1]
 
@@ -97,9 +98,7 @@ void loop() {
   // 2차원 공간: (x >= min_x && x <= max_x) && (y >= min_y && y <= max_y)
 
   if (!(x_min < pos_x && x_max >= pos_x)) status = GUIDING;
-  else {
-    // TODO: BACK, IDLE
-  }
+  else status = BACKING;
 
   if (status == GUIDING) {
     // 1차원 공간에 대한 안내논리
@@ -107,13 +106,20 @@ void loop() {
     // http://www.hardcopyworld.com/ngine/aduino/index.php/archives/740
     if (Serial.available())
       pos_x = Serial.readString().toFloat(); // TODO: if it's not a zero
-      // 1-d guide; DO NOT DECLARE pos_y
+    // 1-d guide; DO NOT DECLARE pos_y
 
     log(DWM1000, String(pos_x));
 
     if (pos_x < x_min) { // 앞으로
     }
     if (pos_x > x_max) {// 뒤로
+    }
+  } else if (status == BACKING) {
+    // TODO: 되돌아가기!
+    if (Serial.available())
+      pos_x = Serial.readString().toFloat(); // TODO: if it's not a zero
+    if (pos_x < 1.0) {
+      status = IDLE;
     }
   }
 }
