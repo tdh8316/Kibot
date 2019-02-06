@@ -1,6 +1,8 @@
 #include <SPI.h>
 #include "DW1000Ranging.h"
 
+#define debug true
+
 const uint8_t PIN_RST = 9;
 const uint8_t PIN_IRQ = 2;
 const uint8_t PIN_SS = SS;
@@ -23,18 +25,24 @@ void loop() {
 }
 
 void newRange() {
-  Serial.print("from: "); Serial.print(DW1000Ranging.getDistantDevice()->getShortAddress(), HEX);
-  Serial.print("\t Range: "); Serial.print(DW1000Ranging.getDistantDevice()->getRange()); Serial.print(" m");
-  Serial.print("\t RX power: "); Serial.print(DW1000Ranging.getDistantDevice()->getRXPower()); Serial.println(" dBm");
+  if (debug) {
+    Serial.print("from: "); Serial.print(DW1000Ranging.getDistantDevice()->getShortAddress(), HEX);
+    Serial.print("\t Range: "); Serial.print(DW1000Ranging.getDistantDevice()->getRange()); Serial.print(" m");
+    Serial.print("\t RX power: "); Serial.print(DW1000Ranging.getDistantDevice()->getRXPower()); Serial.println(" dBm");
+  }
 }
 
 void newBlink(DW1000Device* device) {
-  Serial.print("blink; 1 device added ! -> ");
-  Serial.print(" short:");
-  Serial.println(device->getShortAddress(), HEX);
+  if (debug) {
+    Serial.print("blink; 1 device added ! -> ");
+    Serial.print(" short:");
+    Serial.println(device->getShortAddress(), HEX);
+  }
 }
 
 void inactiveDevice(DW1000Device* device) {
-  Serial.print("delete inactive device: ");
-  Serial.println(device->getShortAddress(), HEX);
+  if (debug) {
+    Serial.print("delete inactive device: ");
+    Serial.println(device->getShortAddress(), HEX);
+  }
 }
