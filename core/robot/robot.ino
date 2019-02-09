@@ -9,7 +9,6 @@
 #define SERIAL_TIMEOUT 100
 #define BLUETOOTH_TX 2
 #define BLUETOOTH_RX 3
-#define RANGE_DEF -2
 #define x_min classroomRange[0]
 #define x_max classroomRange[1]
 
