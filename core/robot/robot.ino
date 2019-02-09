@@ -74,23 +74,23 @@ void setRange(int id = -1) {
       x_min = 1.5; x_max = 2.5;
       break;
 
-    default:
+    case -1:
       x_min = 0; x_max = 0;
   }
 }
 
 void loop() {
   // 블루투스 신호 대기
-  if (Bluetooth.available()) {
-    setRange(Bluetooth.parseInt());
+  if (Bluetooth.available()) setRange(Bluetooth.parseInt());
+  // DWM1000 신호 대기
+  if (Serial.available()) {
+    int i = Serial.readString().toFloat();
+    if (i != 0) pos_x = i;
   }
-
-  delay(SERIAL_TIMEOUT);
+  // 1-d guide; DO NOT DECLARE pos_y
 
   // Revert if range is invalid
-  if (x_min == x_max) {
-    log("DENINED", "Invalid range"); return;
-  }
+  if (x_min == x_max) return;
 
   // Guide logic
   // 1차원 공간: (x_min < pos_x && x_max >= pos_x)
@@ -103,22 +103,25 @@ void loop() {
     // 1차원 공간에 대한 안내논리
     // DWM1000 위치신호 대기
     // http://www.hardcopyworld.com/ngine/aduino/index.php/archives/740
-    if (Serial.available())
-      pos_x = Serial.readString().toFloat(); // TODO: if it's not a zero
-    // 1-d guide; DO NOT DECLARE pos_y
 
-    log(DWM1000, String(pos_x));
+    log(DWM1000, "x=" + String(pos_x));
 
-    if (pos_x < x_min) { // 앞으로
+    if (pos_x <= x_min) {
+      // 앞으로
     }
-    if (pos_x > x_max) {// 뒤로
+    else if (pos_x >= x_max) {
+      // 뒤로
     }
-  } else if (status == BACKING) {
-    // TODO: 되돌아가기!
-    if (Serial.available())
-      pos_x = Serial.readString().toFloat(); // TODO: if it's not a zero
-    if (pos_x < 1.0) {
+    else status = BACKING;
+    }
+
+  if (status == BACKING) {
+    if (pos_x < 1.0f) {
       status = IDLE;
+    } else {
+      // 뒤로
     }
   }
+
+  delay(SERIAL_TIMEOUT);
 }
