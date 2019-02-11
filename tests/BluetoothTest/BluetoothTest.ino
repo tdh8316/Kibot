@@ -1,18 +1,18 @@
-#include <SoftwareSerial.h>
-
-SoftwareSerial BTSerial(2, 3);   //bluetooth module Tx:Digital 2 Rx:Digital 3
-
 void setup() {
-  Serial.begin(9600);
-  BTSerial.begin(9600);
-  Serial.println("Kibot Bluetooth test");
+  // put your setup code here, to run once:
+  Serial.begin(115200);
+  Serial.println("Kibot bluetooth test!");
+  Serial1.begin(9600);
 }
-
+ 
 void loop() {
-  if (BTSerial.available()) {
-    Serial.println(String(BTSerial.parseInt()));
+ 
+  // put your main code here, to run repeatedly:
+  if (Serial1.available()) {
+    Serial.write(Serial1.read());
   }
+  // Serial –> Data –> BT
   if (Serial.available()) {
-    BTSerial.write(Serial.read());
-  }
+    Serial1.write(Serial.read());
+ }
 }
