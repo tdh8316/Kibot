@@ -7,8 +7,6 @@
 
 // macro
 #define SERIAL_TIMEOUT 100
-#define BLUETOOTH_TX 2
-#define BLUETOOTH_RX 3
 #define x_min classroomRange[0]
 #define x_max classroomRange[1]
 
@@ -18,9 +16,6 @@
 
 #define BLUETOOTH "Bluetooth"
 #define DWM1000 "DWM1000"
-
-
-SoftwareSerial Bluetooth(BLUETOOTH_TX, BLUETOOTH_RX);
 
 // On Arduino MEGA, the double implementation is exactly the same as the float, with no gain in precision.
 // Current position
@@ -42,13 +37,15 @@ size_t log(String TAG, String MESSAGE) {
 void setup() {
   Serial.begin(115200);
   Serial.setTimeout(SERIAL_TIMEOUT);
-  Bluetooth.begin(9600);
+  Serial1.begin(9600); // Bluetooth
 
   // Initialize DCMotor
   pinMode(5, OUTPUT);
   pinMode(6, OUTPUT);
   pinMode(10, OUTPUT);
   pinMode(11, OUTPUT);
+
+  Serial.println("Bootstrap completed successfully.");
 }
 
 // DC Motor
@@ -67,7 +64,6 @@ void moveStop() {
   analogWrite(11, 0);
 }
 
-
 void setRange(int id = -1) {
   switch (id) {
     case 101:
@@ -77,15 +73,17 @@ void setRange(int id = -1) {
     case -1:
       x_min = 0; x_max = 0;
   }
+
+  log("setRange", String(x_min) + "~" + String(x_max));
 }
 
 void loop() {
   // 블루투스 신호 대기
-  if (Bluetooth.available()) setRange(Bluetooth.parseInt());
+  if (Serial1.available()) setRange(Serial1.parseInt());
   // DWM1000 신호 대기
   if (Serial.available()) {
-    int i = Serial.readString().toFloat();
-    if (i != 0) pos_x = i;
+    float i = Serial.parseFloat();
+    if (i != 0.0f) pos_x = i;
   }
   // 1-d guide; DO NOT DECLARE pos_y
 
@@ -102,7 +100,6 @@ void loop() {
   if (status == GUIDING) {
     // 1차원 공간에 대한 안내논리
     // DWM1000 위치신호 대기
-    // http://www.hardcopyworld.com/ngine/aduino/index.php/archives/740
 
     log(DWM1000, "x=" + String(pos_x));
 
@@ -113,7 +110,7 @@ void loop() {
       // 뒤로
     }
     else status = BACKING;
-    }
+  }
 
   if (status == BACKING) {
     if (pos_x < 1.0f) {
