@@ -1,62 +1,61 @@
 /*
   Copyright 2018-2019. Donghyeok Tak
-  Required Arduino Mega
+  Required Arduino Mega 2560
+  Kibot Main Processing Unit
 */
 
-#include <SoftwareSerial.h>
+#if !defined(ARDUINO_AVR_MEGA2560)
+#error "You must use the Arduino Mega 2560 board."
+#endif
 
-// macro
-#define SERIAL_TIMEOUT 100
-#define x_min classroomRange[0]
-#define x_max classroomRange[1]
+#define Bluetooth Serial1
+#define println Serial.println
 
-#define GUIDING 1
-#define BACKING -1
-#define IDLE 0
+#define x_min range[0]
+#define x_max range[1]
 
-#define BLUETOOTH "Bluetooth"
-#define DWM1000 "DWM1000"
+const int SERIAL_TIMEOUT = 100; // ms
 
 // On Arduino MEGA, the double implementation is exactly the same as the float, with no gain in precision.
-// Current position
+
+// Current position (x, y)
 float pos_x, pos_y = 0;
 
-// The range of the classrooms
-float classroomRange[2] = {0, 0};
-
-
-// Status
-int status = IDLE;
-
-
-size_t log(String TAG, String MESSAGE) {
-  return Serial.println(TAG + " : " + MESSAGE);
-}
+// The range for the destination
+float range[2] = {0, 0};
 
 
 void setup() {
+  // Start the serial communication in 115200 bps for compatibility with DWM1000
   Serial.begin(115200);
   Serial.setTimeout(SERIAL_TIMEOUT);
-  Serial1.begin(9600); // Bluetooth
 
-  // Initialize DCMotor
+  Bluetooth.begin(9600);
+
+  // Initialize DC motor
   pinMode(5, OUTPUT);
   pinMode(6, OUTPUT);
   pinMode(10, OUTPUT);
   pinMode(11, OUTPUT);
 
-  Serial.println("Bootstrap completed successfully.");
+  println(__DATE__ " " __TIME__ ":The Kibot boot sequence has been successfully completed.");
 }
 
-// DC Motor
+
 void moveForward() {
   analogWrite(5, 0);
-  analogWrite(6, 150);
+  analogWrite(6, 200);
   analogWrite(10, 0);
-  analogWrite(11, 150);
+  analogWrite(11, 200);
 }
 
-// DC Motor
+void moveBack() {
+  analogWrite(5, 200);
+  analogWrite(6, 0);
+  analogWrite(10, 200);
+  analogWrite(11, 0);
+}
+
 void moveStop() {
   analogWrite(5, 0);
   analogWrite(6, 0);
@@ -64,60 +63,46 @@ void moveStop() {
   analogWrite(11, 0);
 }
 
+
 void setRange(int id = -1) {
   switch (id) {
     case 101:
-      x_min = 1.5; x_max = 2.5;
-      break;
+      x_min, x_max = 1.5, 2.5; break;
 
     case -1:
-      x_min = 0; x_max = 0;
+      x_min = x_max = 0; break;
   }
-
-  log("setRange", String(x_min) + "~" + String(x_max));
 }
 
-void loop() {
-  // 블루투스 신호 대기
-  if (Serial1.available()) setRange(Serial1.parseInt());
-  // DWM1000 신호 대기
-  if (Serial.available()) {
-    float i = Serial.parseFloat();
-    if (i != 0.0f) pos_x = i;
-  }
-  // 1-d guide; DO NOT DECLARE pos_y
 
-  // Revert if range is invalid
+void loop() {
+
+  // DWM1000 communicates with the Kibot in Serial.
+  if (Serial.available()) {
+    float x = Serial.parseFloat(); if (x != 0.0f) pos_x = x;
+    // Only 1-d guidance is implemented.
+  }
+
+  // Kibot client communicates with the Kibot in Bluetooth
+  if (Bluetooth.available()) setRange(Bluetooth.parseInt());
+
+  // If the range is invalid, it does not need to continue running
   if (x_min == x_max) return;
 
-  // Guide logic
-  // 1차원 공간: (x_min < pos_x && x_max >= pos_x)
-  // 2차원 공간: (x >= min_x && x <= max_x) && (y >= min_y && y <= max_y)
+  /* Logic:
+      1-d space: (x_min < pos_x && x_max >= pos_x) => in range
+      2-d space: ((x_min < pos_x && x_max >= pos_x) && (y_min < pos_y && y_max >= pos_y)) => in range
+  */
 
-  if (!(x_min < pos_x && x_max >= pos_x)) status = GUIDING;
-  else status = BACKING;
-
-  if (status == GUIDING) {
-    // 1차원 공간에 대한 안내논리
-    // DWM1000 위치신호 대기
-
-    log(DWM1000, "x=" + String(pos_x));
-
-    if (pos_x <= x_min) {
-      // 앞으로
-    }
-    else if (pos_x >= x_max) {
-      // 뒤로
-    }
-    else status = BACKING;
+  // If the Kibot is not in range
+  if (!(x_min < pos_x && x_max >= pos_x)) {
+    if (pos_x < x_min) moveForward();
+    else if (pos_x > x_max) moveBack();
   }
-
-  if (status == BACKING) {
-    if (pos_x < 1.0f) {
-      status = IDLE;
-    } else {
-      // 뒤로
-    }
+  // If the Kibot is in range
+  else {
+    moveStop();
+    // Do something
   }
 
   delay(SERIAL_TIMEOUT);
