@@ -8,8 +8,16 @@ fun initClassInfo() {
     val jsonString = URL(DATA_URL).readText()
 
     if (jsonString == "") {
-        return
+        // TODO: Read something from internal storage
+    } else {
+        // TODO: Save it!
     }
 
     classInfo = JSONObject(jsonString)
+}
+
+fun getId(o: String): Int {
+    // TODO: match id
+    // classInfo!!.getString(o)
+    return 101
 }

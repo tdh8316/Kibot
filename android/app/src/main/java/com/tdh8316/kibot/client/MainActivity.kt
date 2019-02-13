@@ -83,9 +83,12 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onResults(result: Bundle) {
-                //getting recognized stuff
                 sendToKibot(
-                    result.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0]
+                    getId(
+                        getObject(
+                            result.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0]
+                        )
+                    )
                 )
                 mic.setImageResource(R.drawable.ic_mic_black_24dp)
             }
@@ -111,12 +114,12 @@ class MainActivity : AppCompatActivity() {
         bluetooth.connectToDevice(device)
     }
 
-    private fun sendToKibot(str: String) {
+    private fun sendToKibot(id: Int) {
         if (!bluetooth.isConnected) {
             showDialog("└(๑•Kibot 과 연결되어있지 않아요...•́๑)┐")
         } else {
             // TODO: Tokenize Korean
-            bluetooth.send(str)
+            bluetooth.send(id.toString())
         }
     }
 
