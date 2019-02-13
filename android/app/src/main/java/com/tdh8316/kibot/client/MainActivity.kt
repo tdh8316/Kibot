@@ -111,7 +111,6 @@ class MainActivity : AppCompatActivity() {
         bluetooth.connectToDevice(device)
     }
 
-    @Suppress("unused")
     private fun sendToKibot(str: String) {
         if (!bluetooth.isConnected) {
             showDialog("└(๑•Kibot 과 연결되어있지 않아요...•́๑)┐")
