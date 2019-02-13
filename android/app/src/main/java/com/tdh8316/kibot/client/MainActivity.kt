@@ -9,7 +9,9 @@ import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.WindowManager
+import kotlinx.android.synthetic.main.activity_main.*
 import me.aflak.bluetooth.Bluetooth
 import me.aflak.bluetooth.DiscoveryCallback
 import java.util.*
@@ -37,6 +39,12 @@ class MainActivity : AppCompatActivity() {
         }
         initBluetooth()
         initSpeechRecognizer()
+
+        mic.setOnClickListener {
+            Log.d(MainActivity::class.java.name, "Listener is started.")
+            mic.setImageResource(R.drawable.ic_mic_black_24dp)
+            mSpeechRecognizer.startListening(mSpeechRecognizerIntent)
+        }
     }
 
     private fun initSpeechRecognizer() {
@@ -79,6 +87,7 @@ class MainActivity : AppCompatActivity() {
                 sendToKibot(
                     result.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0]
                 )
+                mic.setImageResource(R.drawable.ic_mic_black_24dp)
             }
         })
     }

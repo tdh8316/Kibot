@@ -21,6 +21,7 @@ android {
         applicationId "com.tdh8316.kibot.client"
         minSdkVersion 19
         targetSdkVersion 28
+        vectorDrawables.useSupportLibrary = true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
