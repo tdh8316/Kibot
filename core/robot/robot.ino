@@ -4,11 +4,12 @@
   Kibot Main Processing Unit
 */
 
-#if !defined(ARDUINO_AVR_MEGA2560)
-#error "You must use the Arduino Mega 2560 board."
-#endif
+/*#if !defined(ARDUINO_AVR_MEGA2560)
+  #error "You must use the Arduino Mega 2560 board."
+  #endif*/
 
-#define Bluetooth Serial1
+#define Bluetooth Serial
+#define print Serial.print
 #define println Serial.println
 
 #define x_min range[0]
@@ -28,17 +29,27 @@ float range[2] = {0, 0};
 void setup() {
   // Start the serial communication in 115200 bps for compatibility with DWM1000
   Serial.begin(115200);
-  Serial.setTimeout(SERIAL_TIMEOUT);
+  println("This program is compiled at " __DATE__ " " __TIME__ ".");
+  println("Starting Kibot...");
 
-  Bluetooth.begin(9600);
+  print("  Change Serial timeout to 100ms...");
+  Serial.setTimeout(SERIAL_TIMEOUT);
+  println("[Done]");
+
+  print("  Start Bluetooth...");
+  //Bluetooth.begin(9600);
+  println("[Done]");
 
   // Initialize DC motor
+  print("  Change pin mode used for DC motor...");
   pinMode(5, OUTPUT);
   pinMode(6, OUTPUT);
   pinMode(10, OUTPUT);
   pinMode(11, OUTPUT);
+  println("[Done]");
 
-  println(__DATE__ " " __TIME__ ":The Kibot boot sequence has been successfully completed.");
+  println("  Everything is initialized.");
+  println("The setup sequence is done. It took " + String(millis()) + "ms.\n");
 }
 
 
