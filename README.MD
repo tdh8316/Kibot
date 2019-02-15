@@ -14,6 +14,7 @@
 
 ## 교실 갱신 요청하기
 > `Kibot`은 2018-2019년 동안 개발되었습니다.
+
 Kibot client 는 애플리케이션 액티비티가 시작될 때 마다 `client/share/classinfo.json` 에 연결을 시도합니다.
 연결에 성공하면 `map.json` 에 저장하고, 다음 실행부터 인터넷에 연결할 수 없을 때 사용합니다.
 `classinfo.json` 은 다음과 같은 구조입니다:
