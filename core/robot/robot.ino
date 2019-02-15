@@ -8,7 +8,7 @@
   #error "You must use the Arduino Mega 2560 board."
   #endif*/
 
-#define Bluetooth Serial
+#define Bluetooth Serial1
 #define print Serial.print
 #define println Serial.println
 
@@ -37,7 +37,7 @@ void setup() {
   println("[Done]");
 
   print("  Start Bluetooth...");
-  //Bluetooth.begin(9600);
+  Bluetooth.begin(9600);
   println("[Done]");
 
   // Initialize DC motor
