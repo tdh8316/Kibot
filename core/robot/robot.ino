@@ -4,9 +4,9 @@
   Kibot Main Processing Unit
 */
 
-/*#if !defined(ARDUINO_AVR_MEGA2560)
-  #error "You must use the Arduino Mega 2560 board."
-  #endif*/
+#if !defined(ARDUINO_AVR_MEGA2560)
+#error "You must use the Arduino Mega 2560 board."
+#endif
 
 #define Bluetooth Serial1
 #define print Serial.print
@@ -95,10 +95,12 @@ void loop() {
   }
 
   // Kibot client communicates with the Kibot in Bluetooth
-  if (Bluetooth.available()) setRange(Bluetooth.parseInt());
+  if (Bluetooth.available())
+    setRange(Bluetooth.parseInt());
 
   // If the range is invalid, it does not need to continue running
-  if (x_min == x_max) return;
+  if (x_min == x_max)
+    return;
 
   /* Logic:
       1-d space: (x_min < pos_x && x_max >= pos_x) => in range
