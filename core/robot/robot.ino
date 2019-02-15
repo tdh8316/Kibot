@@ -78,10 +78,14 @@ void moveStop() {
 void setRange(int id = -1) {
   switch (id) {
     case 101:
-      x_min, x_max = 1.5, 2.5; break;
+      x_min = 1.5;
+      x_max = 2.5;
+      break;
 
     case -1:
-      x_min = x_max = 0; break;
+      x_min = 0;
+      x_max = 0;
+      break;
   }
 }
 
@@ -107,16 +111,9 @@ void loop() {
       2-d space: ((x_min < pos_x && x_max >= pos_x) && (y_min < pos_y && y_max >= pos_y)) => in range
   */
 
-  // If the Kibot is not in range
-  if (!(x_min < pos_x && x_max >= pos_x)) {
-    if (pos_x < x_min) moveForward();
-    else if (pos_x > x_max) moveBack();
-  }
-  // If the Kibot is in range
-  else {
-    moveStop();
-    // Do something
-  }
+  if (pos_x < x_min) moveForward();
+  else if (pos_x > x_max) moveBack();
+  else moveStop();
 
   delay(SERIAL_TIMEOUT);
 }
