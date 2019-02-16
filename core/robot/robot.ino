@@ -82,6 +82,12 @@ void setRange(int id = -1) {
     case 101:
       x_min = 2; x_max = 3;
       break;
+    case 102:
+      x_min = 3.5; x_max = 4.5;
+      break;
+    case 103:
+      x_min = 5; x_max = 6;
+      break;
 
     case -1:
       x_min = 0; x_max = 0;
