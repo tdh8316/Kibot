@@ -14,6 +14,7 @@ import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_main.*
 import me.aflak.bluetooth.Bluetooth
 import me.aflak.bluetooth.DiscoveryCallback
+import java.io.File
 import java.util.*
 
 
@@ -25,6 +26,16 @@ class MainActivity : AppCompatActivity() {
     private val mSpeechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val initThread = Thread {
+            initClassInfo(
+                File(
+                    "${getExternalFilesDir(null)}",
+                    "classes.json"
+                )
+            )
+        }
+        initThread.start()
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
@@ -32,13 +43,10 @@ class MainActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
         window.addFlags(524288) // FLAG_SHOW_WHEN_LOCKED
 
-        val initThread = Thread { initClassInfo() }
-        initThread.start(); initThread.join()
-        if (classInfo == null) {
-            // TODO: Read cache from internal storage
-        }
         initBluetooth()
         initSpeechRecognizer()
+
+        initThread.join()
 
         mic.setOnClickListener {
             Log.d(MainActivity::class.java.name, "Listener is started.")
@@ -66,7 +74,7 @@ class MainActivity : AppCompatActivity() {
                     SpeechRecognizer.ERROR_SPEECH_TIMEOUT ->
                         "제가 참을성이 없어서 이렇게 길게는 못듣겠네요 ><"
                     SpeechRecognizer.ERROR_SERVER, SpeechRecognizer.ERROR_NETWORK_TIMEOUT ->
-                        "앗 갑자기 귀가 안들려엇..."
+                        "네트워크 오류"
                     SpeechRecognizer.ERROR_AUDIO ->
                         "오류: 오디오 녹음 실패"
                     SpeechRecognizer.ERROR_RECOGNIZER_BUSY ->
