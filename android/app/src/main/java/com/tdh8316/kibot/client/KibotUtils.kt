@@ -30,6 +30,6 @@ fun initClassInfo(file: File) {
     classInfo = JSONObject(jsonString)
 }
 
-fun getId(o: String): Int {
-    return classInfo!!.getString(o).toInt()
+fun getId(o: String): Int? {
+    return classInfo!!.getString(o)?.toInt()
 }

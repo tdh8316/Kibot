@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import me.aflak.bluetooth.Bluetooth
 import me.aflak.bluetooth.DiscoveryCallback
 import java.io.File
+import java.lang.Exception
 import java.util.*
 
 
@@ -104,30 +105,37 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initBluetooth() {
-        bluetooth.onStart()
-        bluetooth.enable()
-        bluetooth.setDiscoveryCallback(object : DiscoveryCallback {
-            override fun onDiscoveryStarted() {}
-            override fun onDiscoveryFinished() {}
-            override fun onDeviceUnpaired(device: BluetoothDevice) {}
-            override fun onError(message: String) {}
-            override fun onDeviceFound(device: BluetoothDevice) {}
-            override fun onDevicePaired(device: BluetoothDevice) {}
-        })
-        bluetooth.connectToName(KIBOT_BLUETOOTH_NAME)
-        val devices = bluetooth.pairedDevices
-        val device = devices[0]
-        device.createBond()
-        device.setPin(byteArrayOf(KIBOT_BLUETOOTH_PIN.toByte()))
-        bluetooth.connectToDevice(device)
+        try {
+            bluetooth.onStart()
+            bluetooth.enable()
+            bluetooth.setDiscoveryCallback(object : DiscoveryCallback {
+                override fun onDiscoveryStarted() {}
+                override fun onDiscoveryFinished() {}
+                override fun onDeviceUnpaired(device: BluetoothDevice) {}
+                override fun onError(message: String) {}
+                override fun onDeviceFound(device: BluetoothDevice) {}
+                override fun onDevicePaired(device: BluetoothDevice) {}
+            })
+            bluetooth.connectToName(KIBOT_BLUETOOTH_NAME)
+            val devices = bluetooth.pairedDevices
+            val device = devices[0]
+            device.createBond()
+            device.setPin(byteArrayOf(KIBOT_BLUETOOTH_PIN.toByte()))
+            bluetooth.connectToDevice(device)
+        } catch (e: Exception) {
+            showDialog("Kibot 과 연결할 수 없습니다!!!")
+        }
     }
 
-    private fun sendToKibot(id: Int) {
+    private fun sendToKibot(id: Int?) {
         if (!bluetooth.isConnected) {
             showDialog("└(๑•Kibot 과 연결되어있지 않아요...•́๑)┐")
         } else {
-            // TODO: Tokenize Korean
-            bluetooth.send(id.toString())
+            if (id == null) {
+                return
+            }
+            Log.d("ID", "$id")
+            bluetooth.send("$id")
         }
     }
 
