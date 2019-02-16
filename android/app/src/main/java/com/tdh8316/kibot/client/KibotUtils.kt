@@ -31,5 +31,9 @@ fun initClassInfo(file: File) {
 }
 
 fun getId(o: String): Int? {
-    return classInfo!!.getString(o)?.toInt()
+    return try {
+        classInfo!!.getString(o)?.toInt()
+    } catch (e: java.lang.Exception) {
+        classInfoReversed!!.getString(o)?.toInt()
+    }
 }
