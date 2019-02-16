@@ -104,13 +104,14 @@ void loop() {
     setRange(Bluetooth.parseInt());
   }
 
+  if (isKibotBacking) {
+    if (!pos_x < 1.5) moveBack();
+    else isKibotBacking = false;
+  }
+
   // If the range is invalid, it does not need to continue running
   if (x_min == x_max)
     return;
-
-  if (isKibotBacking) {
-    // TODO: BACKING
-  }
 
   /* Logic:
       1-d space: (x_min < pos_x && x_max >= pos_x) => in range
@@ -120,6 +121,7 @@ void loop() {
   if (pos_x < x_min) moveForward();
   else if (pos_x > x_max) moveBack();
   else {
+    setRange();
     // The Kibot is in somewhere...
     moveStop();
     // Do something when arrive!
