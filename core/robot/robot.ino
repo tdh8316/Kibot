@@ -20,10 +20,12 @@ const int SERIAL_TIMEOUT = 100; // ms
 // On Arduino MEGA, the double implementation is exactly the same as the float, with no gain in precision.
 
 // Current position (x, y)
-float pos_x, pos_y = 0;
+float pos_x, pos_y = 0.0f;
 
 // The range for the destination
 float range[2] = {0, 0};
+
+boolean isKibotBacking = false;
 
 
 void setup() {
@@ -78,13 +80,11 @@ void moveStop() {
 void setRange(int id = -1) {
   switch (id) {
     case 101:
-      x_min = 1.5;
-      x_max = 2.5;
+      x_min = 2; x_max = 3;
       break;
 
     case -1:
-      x_min = 0;
-      x_max = 0;
+      x_min = 0; x_max = 0;
       break;
   }
 }
@@ -99,12 +99,18 @@ void loop() {
   }
 
   // Kibot client communicates with the Kibot in Bluetooth
-  if (Bluetooth.available())
+  if (Bluetooth.available()) {
+    isKibotBacking = false;
     setRange(Bluetooth.parseInt());
+  }
 
   // If the range is invalid, it does not need to continue running
   if (x_min == x_max)
     return;
+
+  if (isKibotBacking) {
+    // TODO: BACKING
+  }
 
   /* Logic:
       1-d space: (x_min < pos_x && x_max >= pos_x) => in range
@@ -113,7 +119,13 @@ void loop() {
 
   if (pos_x < x_min) moveForward();
   else if (pos_x > x_max) moveBack();
-  else moveStop();
+  else {
+    // The Kibot is in somewhere...
+    moveStop();
+    // Do something when arrive!
+    delay(5000);
+    isKibotBacking = true;
+  }
 
   delay(SERIAL_TIMEOUT);
 }
