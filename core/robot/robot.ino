@@ -55,15 +55,15 @@ void setup() {
 
 void moveForward() {
   analogWrite(5, 0);
-  analogWrite(6, 200);
+  analogWrite(6, 255);
   analogWrite(10, 0);
-  analogWrite(11, 200);
+  analogWrite(11, 255);
 }
 
 void moveBack() {
-  analogWrite(5, 200);
+  analogWrite(5, 255);
   analogWrite(6, 0);
-  analogWrite(10, 200);
+  analogWrite(10, 255);
   analogWrite(11, 0);
 }
 
