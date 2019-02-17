@@ -92,13 +92,19 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onResults(result: Bundle) {
-                sendToKibot(
-                    getId(
-                        getObject(
-                            result.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0]
-                        )
+                val m = result.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0]
+                val id = getId(
+                    getObject(
+                        m
                     )
                 )
+                if (id == null) {
+                    showDialog("$m => 정의되지 않음")
+                } else {
+                    sendToKibot(
+                        id
+                    )
+                }
                 mic.setImageResource(R.drawable.ic_mic_black_24dp)
             }
         })
