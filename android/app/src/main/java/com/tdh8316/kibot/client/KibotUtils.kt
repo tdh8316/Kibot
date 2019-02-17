@@ -1,6 +1,7 @@
 package com.tdh8316.kibot.client
 
 import android.util.Log
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
 import java.net.URL
@@ -34,6 +35,10 @@ fun getId(o: String): Int? {
     return try {
         classInfo!!.getString(o)?.toInt()
     } catch (e: java.lang.Exception) {
-        classInfoReversed!!.getString(o)?.toInt()
+        try {
+            classInfoReversed!!.getString(o)?.toInt()
+        } catch (e: JSONException) {
+            null
+        }
     }
 }
