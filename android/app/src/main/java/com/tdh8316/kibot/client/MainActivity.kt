@@ -11,11 +11,11 @@ import android.speech.SpeechRecognizer
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.WindowManager
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import me.aflak.bluetooth.Bluetooth
 import me.aflak.bluetooth.DiscoveryCallback
 import java.io.File
-import java.lang.Exception
 import java.util.*
 
 
@@ -93,11 +93,13 @@ class MainActivity : AppCompatActivity() {
 
             override fun onResults(result: Bundle) {
                 val m = result.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)!![0]
-                val id = getId(
-                    getObject(
-                        m
-                    )
+                val o = getObject(
+                    m
                 )
+                val id = getId(
+                    o
+                )
+                showDialog("NLP=>$o")
                 if (id == null) {
                     showDialog("$m => 정의되지 않음")
                 } else {
@@ -134,6 +136,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sendToKibot(id: Int?) {
+        Toast.makeText(this, "$id", Toast.LENGTH_LONG).show()
         if (!bluetooth.isConnected) {
             showDialog("└(๑•Kibot 과 연결되어있지 않아요...•́๑)┐")
         } else {
