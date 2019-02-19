@@ -25,7 +25,7 @@ fun initClassInfo(file: File) {
             createNewFile()
             writeText(text = jsonString)
         }
-        Log.d("data", "saved")
+        Log.d(CLIENT_TAG, "Map data is saved")
     }
 
     classInfo = JSONObject(jsonString)

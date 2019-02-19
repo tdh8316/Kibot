@@ -1,5 +1,6 @@
 package com.tdh8316.kibot.client
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_log.*
 import kotlinx.android.synthetic.main.activity_main.*
 import me.aflak.bluetooth.Bluetooth
 import me.aflak.bluetooth.DiscoveryCallback
@@ -50,10 +52,14 @@ class MainActivity : AppCompatActivity() {
         initThread.join()
 
         mic.setOnClickListener {
-            Log.d(MainActivity::class.java.name, "Listener is started.")
+            Log.d(CLIENT_TAG, "Listener is started.")
             mic.setImageResource(R.drawable.ic_mic_black_24dp)
             mSpeechRecognizer.startListening(mSpeechRecognizerIntent)
         }
+        button.setOnClickListener {
+            startActivity(Intent(this, LogActivity::class.java))
+        }
+        Log.d(CLIENT_TAG, "Created MainActivity")
     }
 
     private fun initSpeechRecognizer() {
@@ -135,15 +141,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun sendToKibot(id: Int?) {
         Toast.makeText(this, "$id", Toast.LENGTH_LONG).show()
         if (!bluetooth.isConnected) {
+            Log.d(CLIENT_TAG, "Bluetooth is not available (ID$id)")
+            textView.text = textView.text.toString() + "Bluetooth is not available (ID$id)"
             showDialog("└(๑•Kibot 과 연결되어있지 않아요...•́๑)┐")
         } else {
             if (id == null) {
                 return
             }
-            Log.d("ID", "$id")
+            textView.text = textView.text.toString() + "bluetooth->write($id)"
             bluetooth.send("$id")
         }
     }
@@ -154,11 +163,6 @@ class MainActivity : AppCompatActivity() {
         builder.setMessage(msg)
         builder.setPositiveButton("확인", null)
         builder.show()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        bluetooth.onStop()
     }
 
     override fun onBackPressed() {
