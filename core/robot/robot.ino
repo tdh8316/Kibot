@@ -36,11 +36,11 @@ void setup() {
 
   print("  Change Serial timeout to 100ms...");
   Serial.setTimeout(SERIAL_TIMEOUT);
-  println("[Done]");
+  println(" [Done]");
 
   print("  Start Bluetooth...");
-  Bluetooth.begin(9600);
-  println("[Done]");
+  Serial1.begin(9600);
+  println(" [Done]");
 
   // Initialize DC motor
   print("  Change pin mode used for DC motor...");
@@ -50,8 +50,10 @@ void setup() {
   pinMode(11, OUTPUT);
   println("[Done]");
 
-  println("  Everything is initialized.");
-  println("The setup sequence is done. It took " + String(millis()) + "ms.\n");
+  print("  Everything is initialized. Waiting for DWM1000 to stabilize...");
+  delay(5000);
+  println(" [Done]");
+  println("The setup sequence is done.");
 }
 
 
@@ -111,8 +113,11 @@ void loop() {
   }
 
   if (isKibotBacking) {
-    if (!pos_x < 1.5) moveBack();
-    else isKibotBacking = false;
+    if (pos_x > 1.5) moveBack();
+    else {
+      moveStop();
+      isKibotBacking = false;
+    }
   }
 
   // If the range is invalid, it does not need to continue running
@@ -127,8 +132,9 @@ void loop() {
   if (pos_x < x_min) moveForward();
   else if (pos_x > x_max) moveBack();
   else {
+    // Initialize the range to 0, 0
     setRange();
-    // The Kibot is in somewhere...
+
     moveStop();
     // Do something when arrive!
     delay(5000);
