@@ -1,6 +1,9 @@
 # 개요
 `Kibot`은 강원중학교 안내 로봇입니다.
 
+> 2019년 2월 22일 대전 KT 인재개발원에서 열린 중소벤처기업부 주최, 한국과학창의재단 주관의 2018 하반기 메이커 문화확산사업 성과발표회 출품작입니다.
+
+
 ## Project structure
     .
     ├── android         # Kibot client for Android
@@ -13,8 +16,6 @@
     └── README.md       # This file
 
 ## 교실 갱신 요청하기
-> `Kibot`은 2018-2019년 동안 개발되었습니다.
-
 Kibot client 는 애플리케이션 액티비티가 시작될 때 마다 `client/share/classinfo.json` 에 연결을 시도합니다.
 연결에 성공하면 `classes.json` 에 저장하고, 다음 실행부터 인터넷에 연결할 수 없을 때 사용합니다.
 `classinfo.json` 은 다음과 같은 구조입니다:
