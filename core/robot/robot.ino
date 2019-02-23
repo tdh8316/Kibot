@@ -61,13 +61,13 @@ void moveForward() {
   analogWrite(5, 0);
   analogWrite(6, 255);
   analogWrite(10, 0);
-  analogWrite(11, 255);
+  analogWrite(11, 205);
 }
 
 void moveBack() {
   analogWrite(5, 255);
   analogWrite(6, 0);
-  analogWrite(10, 255);
+  analogWrite(10, 205);
   analogWrite(11, 0);
 }
 
