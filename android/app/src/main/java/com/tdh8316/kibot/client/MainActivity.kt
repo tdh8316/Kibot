@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_log.*
 import kotlinx.android.synthetic.main.activity_main.*
 import me.aflak.bluetooth.Bluetooth
 import me.aflak.bluetooth.DiscoveryCallback
@@ -56,10 +55,6 @@ class MainActivity : AppCompatActivity() {
             mic.setImageResource(R.drawable.ic_mic_black_24dp)
             mSpeechRecognizer.startListening(mSpeechRecognizerIntent)
         }
-        button.setOnClickListener {
-            startActivity(Intent(this, LogActivity::class.java))
-        }
-        Log.d(CLIENT_TAG, "Created MainActivity")
     }
 
     private fun initSpeechRecognizer() {
@@ -146,13 +141,11 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "$id", Toast.LENGTH_LONG).show()
         if (!bluetooth.isConnected) {
             Log.d(CLIENT_TAG, "Bluetooth is not available (ID$id)")
-            textView.text = textView.text.toString() + "Bluetooth is not available (ID$id)"
             showDialog("└(๑•Kibot 과 연결되어있지 않아요...•́๑)┐")
         } else {
             if (id == null) {
                 return
             }
-            textView.text = textView.text.toString() + "bluetooth->write($id)"
             bluetooth.send("$id")
         }
     }
